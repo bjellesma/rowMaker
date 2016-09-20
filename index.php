@@ -12,37 +12,44 @@ the plugin works by counting the number of images inbetween shortcode tags
 */
 
 add_shortcode('rows', function($params, $content){
-  $rowStart = "<div class='row'>";
+  $rowStart = '<div class=row>';
 
-  $divEnd = "</div>";
+  $rowEnd = "</div>";
   $clearFix = "<div class='clearfix'></div>";
 
   //parse out content
-  $images = explode('<', $content);
+  $images = preg_split('/^\<img$/ ', $content);
 
 
   //make content wrapper
   $contentWrapper = $rowStart;
-  if(!isset($params['pictures'])){
-    $params['pictures'] = 1;
+
+  //account for offset
+  for($i = 0; $i <= count($images) - 1; $i++){
+    $images[$i] = bootStrapWrap($images[$i], count($images));
+    $contentWrapper .= $images[$i];
   }
-  else {
-    switch($params['pictures']){
-      case 1:
-        $colStart = "<div class='col-md-12'>";
-        $contentWrapper .= $colStart;
-      case 2:
-        $colStart = "<div class='col-md-6'>";
-        $contentWrapper .= $colStart . $colStart;
-      case 3:
-        $colStart = "<div class='col-md-4'>";
-        $contentWrapper .= $colStart . $colStart . $colStart;
-      case 4:
-        $colStart = "<div class='col-md-3'>";
-        $contentWrapper .= $colStart . $colStart . $colStart . $colStart;
-    }
-  }
-  print_r($images[1]);
+  $contentWrapper .= $rowEnd . $clearFix;
+
+  return $contentWrapper;
 });
+
+function bootStrapWrap($content, $count){
+  $colEnd = '</div>';
+  switch($count){
+    case 1:
+      $colStart = '<div class=col-md-12>';
+    case 2:
+      $colStart = "<div class='col-md-6'>";
+    case 3:
+      $colStart = "<div class='col-md-4'>";
+    case 4:
+      $colStart = "<div class='col-md-3'>";
+    default:
+      $colStart = '<div class=col-md-12>';
+  }
+  $bootstraped = $colStart . $content . $colEnd;
+  return $bootstraped;
+}
 
 ?>
