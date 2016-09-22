@@ -16,11 +16,11 @@ add_shortcode('rows', function($params, $content){
   $params = shortcode_atts(
     array(
       'content' => empty($content) ? $content : 'Please use a closing shortcode tag for rowMaker',
-      'searchTag' => '[caption'
+      'searchtag' => 'caption'
     ), $params
   );
   $rowStart = '<div class=row><div class=col-md-12>';
-  $searchTag = $params['searchTag'];
+  $searchTag = '[' . $params['searchtag'];
   $rowEnd = "</div>";
   $clearFix = "<div class='clearfix'></div>";
 
@@ -50,7 +50,7 @@ function bootStrapWrap($content, $count, $searchTag){
       $colStart = '<div class=col-md-12>';
       break;
     case 2:
-      $colStart = "<div class='col-md-2'>";
+      $colStart = "<div class='col-md-6'>";
       break;
     case 3:
       $colStart = "<div class='col-md-4'>";
